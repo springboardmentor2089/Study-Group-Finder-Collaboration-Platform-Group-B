@@ -1,23 +1,25 @@
 package com.studygroup.studygroupfinder.repository;
+
 import com.studygroup.studygroupfinder.model.GroupMember;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Optional;
+
 @Repository
 public interface GroupMemberRepository extends JpaRepository<GroupMember, Long> {
-    List<GroupMember> findByGroupId(Long groupId);
+    List<GroupMember> findByGroup_Id(Long groupId);
     List<GroupMember> findByUserEmail(String userEmail);
-    Optional<GroupMember> findByGroupIdAndUserEmail(Long groupId, String userEmail);
+    Optional<GroupMember> findByGroup_IdAndUserEmail(Long groupId, String userEmail);
     
-    @Query("SELECT COUNT(gm) FROM GroupMember gm WHERE gm.groupId = ?1")
+    @Query("SELECT COUNT(gm) FROM GroupMember gm WHERE gm.group.id = ?1")
     Long countMembersByGroupId(Long groupId);
     
-    @Query("SELECT gm FROM GroupMember gm WHERE gm.groupId = ?1 AND gm.role = 'Owner'")
+    @Query("SELECT gm FROM GroupMember gm WHERE gm.group.id = ?1 AND gm.role = 'Owner'")
     Optional<GroupMember> findGroupOwner(Long groupId);
     
     @Query("SELECT gm FROM GroupMember gm WHERE gm.userEmail = ?1 AND gm.role = 'Member'")
     List<GroupMember> findUserMemberships(String userEmail);
-    
 }

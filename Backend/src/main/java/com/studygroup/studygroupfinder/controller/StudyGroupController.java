@@ -1,4 +1,5 @@
 package com.studygroup.studygroupfinder.controller;
+
 import com.studygroup.studygroupfinder.dto.CreateGroupRequest;
 import com.studygroup.studygroupfinder.model.StudyGroup;
 import com.studygroup.studygroupfinder.model.User;
@@ -8,22 +9,28 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/groups")
 @CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"})
 public class StudyGroupController {
+
     @Autowired
     private StudyGroupService studyGroupService;
+
     @Autowired
     private AuthService authService;
+
     @GetMapping
     public ResponseEntity<List<StudyGroup>> getAllGroups() {
         return ResponseEntity.ok(studyGroupService.getAllGroups());
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getGroupById(@PathVariable Long id) {
         Optional<StudyGroup> group = studyGroupService.getGroupById(id);
@@ -35,6 +42,7 @@ public class StudyGroupController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @PostMapping
     public ResponseEntity<?> createGroup(@Valid @RequestBody CreateGroupRequest request,
                                         @RequestHeader("Authorization") String token) {
@@ -49,6 +57,7 @@ public class StudyGroupController {
             return ResponseEntity.badRequest().body(error);
         }
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteGroup(@PathVariable Long id,
                                          @RequestHeader("Authorization") String token) {
@@ -64,6 +73,7 @@ public class StudyGroupController {
             return ResponseEntity.badRequest().body(error);
         }
     }
+
     @PostMapping("/{id}/join")
     public ResponseEntity<?> requestToJoinGroup(@PathVariable Long id,
                                              @RequestHeader("Authorization") String token) {
@@ -80,6 +90,7 @@ public class StudyGroupController {
             return ResponseEntity.badRequest().body(error);
         }
     }
+
     @PostMapping("/{id}/accept")
     public ResponseEntity<?> acceptJoinRequest(@PathVariable Long id,
                                             @RequestParam String requesterEmail,
@@ -97,6 +108,7 @@ public class StudyGroupController {
             return ResponseEntity.badRequest().body(error);
         }
     }
+
     @PostMapping("/{id}/reject")
     public ResponseEntity<?> rejectJoinRequest(@PathVariable Long id,
                                             @RequestParam String requesterEmail,
@@ -114,22 +126,26 @@ public class StudyGroupController {
             return ResponseEntity.badRequest().body(error);
         }
     }
+
     @GetMapping("/my-groups")
     public ResponseEntity<List<StudyGroup>> getMyGroups(@RequestHeader("Authorization") String token) {
         String email = getUserEmailFromToken(token);
         List<StudyGroup> groups = studyGroupService.getGroupsByMember(email);
         return ResponseEntity.ok(groups);
     }
+
     @GetMapping("/owned")
     public ResponseEntity<List<StudyGroup>> getOwnedGroups(@RequestHeader("Authorization") String token) {
         String email = getUserEmailFromToken(token);
         List<StudyGroup> groups = studyGroupService.getGroupsByOwner(email);
         return ResponseEntity.ok(groups);
     }
+
     private String getUserEmailFromToken(String token) {
         String jwtToken = token.substring(7);
         return jwtService.extractEmail(jwtToken);
     }
+
     @Autowired
     private com.studygroup.studygroupfinder.service.JwtService jwtService;
 }

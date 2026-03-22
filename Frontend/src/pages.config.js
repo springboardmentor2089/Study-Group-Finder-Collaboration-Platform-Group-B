@@ -52,7 +52,8 @@ import Dashboard from './pages/Dashboard';
 import Groups from './pages/Groups';
 import Courses from './pages/Courses';
 import Sessions from './pages/Sessions';
-import Chat from './pages/Chat';
+import ChatPage from './pages/ChatPage';
+import GroupChat from './pages/GroupChat';
 import Profile from './pages/Profile';
 import __Layout from './Layout.jsx';
 
@@ -63,7 +64,8 @@ export const PAGES = {
     "Groups": Groups,
     "Courses": Courses,
     "Sessions": Sessions,
-    "Chat": Chat,
+    "Chat": ChatPage,
+    "GroupChat": GroupChat,
     "Profile": Profile,
 }
 

@@ -1,14 +1,25 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils/index.js";
 import TopBar from "../components/dashboard/TopBar";
 import Sidebar from "../components/dashboard/Sidebar";
 import NotificationBar from "../components/notifications/NotificationBar";
+import ChatNotificationBar from "../components/notifications/ChatNotificationBar";
+import { Users } from "lucide-react";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [groups, setGroups] = useState([]);
   const [peers, setPeers] = useState([]);
   const [connectedPeers, setConnectedPeers] = useState([]);
+
+  const handleCourseChatNavigation = () => {
+    console.log('Dashboard: Course chat icon clicked, opening course group chat page directly');
+    // Navigate to Groups page with course group chat trigger
+    navigate('/Groups?openCourseGroupChat=true');
+    console.log('Dashboard: Course chat navigation called');
+  };
 
   const handleConnectPeer = (peer) => {
     // Check if already connected or pending
@@ -20,143 +31,80 @@ export default function Dashboard() {
 
     if (existingConnection) {
       if (existingConnection.status === 'pending') {
-        alert("Connection request already sent!");
-      } else if (existingConnection.status === 'accepted') {
-        alert("Already connected with this peer!");
+        alert('Connection request already sent!');
+      } else {
+        alert('Already connected to this peer!');
       }
       return;
     }
 
-    // Create connection notification for peer
-    const notifications = JSON.parse(localStorage.getItem("studyconnect_notifications") || "[]");
-    
-    const connectionNotification = {
-      id: Date.now().toString(),
-      type: 'chat_message',
-      sender_email: user.email,
-      recipient_email: peer.email,
-      message: `${user.full_name} wants to connect with you!`,
-      created_at: new Date().toISOString(),
-      read: false
-    };
-
-    notifications.push(connectionNotification);
-    localStorage.setItem("studyconnect_notifications", JSON.stringify(notifications));
-
-    // Add to connected peers list as pending
-    const newConnection = {
+    // Create connection request
+    const connection = {
       id: Date.now().toString(),
       user_email: user.email,
       peer_email: peer.email,
-      peer_name: peer.full_name,
-      peer_university: peer.university,
-      connected_at: new Date().toISOString(),
-      status: 'pending' // pending, accepted, rejected
+      status: 'pending',
+      created_at: new Date().toISOString()
     };
-    connections.push(newConnection);
-    localStorage.setItem("studyconnect_connections", JSON.stringify(connections));
 
-    // Update local state to show "Connecting..."
-    setPeers(prev => prev.filter(p => p.email !== peer.email));
-    loadConnectedPeers(user);
+    // Save connection
+    const allConnections = [...connections, connection];
+    localStorage.setItem("studyconnect_connections", JSON.stringify(allConnections));
+    setConnectedPeers([...connectedPeers, { ...peer, status: 'pending' }]);
 
-    // Show success message
-    alert(`Connection request sent to ${peer.full_name}!`);
+    alert('Connection request sent successfully!');
   };
 
   const handleDisconnectPeer = (peerEmail) => {
-    if (confirm("Are you sure you want to disconnect from this peer?")) {
-      // Remove from connections
-      const connections = JSON.parse(localStorage.getItem("studyconnect_connections") || "[]");
-      const updatedConnections = connections.filter(
-        c => !(c.user_email === user.email && c.peer_email === peerEmail) &&
-             !(c.peer_email === user.email && c.user_email === peerEmail)
-      );
-      localStorage.setItem("studyconnect_connections", JSON.stringify(updatedConnections));
-
-      // Update local state
-      setConnectedPeers(prev => prev.filter(p => p.peer_email !== peerEmail));
-
-      // Show success message
-      alert("Disconnected successfully!");
-    }
-  };
-
-  const loadConnectedPeers = (u) => {
     const connections = JSON.parse(localStorage.getItem("studyconnect_connections") || "[]");
-    const userConnections = connections.filter(
-      c => (c.user_email === u.email || c.peer_email === u.email)
+    const filteredConnections = connections.filter(
+      c => !(c.user_email === user.email && c.peer_email === peerEmail) &&
+           !(c.peer_email === user.email && c.user_email === peerEmail)
     );
     
-    // Get peer details
-    const allUsers = JSON.parse(localStorage.getItem("studyconnect_users") || "[]");
-    const connectedPeersList = userConnections.map(connection => {
-      const peerEmail = connection.user_email === u.email ? connection.peer_email : connection.user_email;
-      const peer = allUsers.find(user => user.email === peerEmail);
-      return {
-        ...connection,
-        peer_email: peerEmail,
-        peer_name: peer?.full_name || 'Unknown',
-        peer_university: peer?.university || 'Unknown'
-      };
-    }).filter(p => p.peer_email !== u.email);
-
-    // Remove duplicates by keeping only the latest connection for each peer
-    const uniquePeers = connectedPeersList.reduce((acc, current) => {
-      const existingIndex = acc.findIndex(p => p.peer_email === current.peer_email);
-      if (existingIndex === -1) {
-        acc.push(current);
-      } else {
-        // Keep the one with more recent timestamp
-        if (new Date(current.connected_at) > new Date(acc[existingIndex].connected_at)) {
-          acc[existingIndex] = current;
-        }
-      }
-      return acc;
-    }, []);
-
-    setConnectedPeers(uniquePeers);
-  };
-
-  const loadData = (u) => {
-    // Get groups from localStorage
-    const allGroups = JSON.parse(localStorage.getItem("studyconnect_groups") || "[]");
-    const myGroups = allGroups.filter(g =>
-      g.owner_email === u.email ||
-      (g.members || []).some(m => m.email === u.email)
-    );
-    setGroups(myGroups.slice(0, 4));
-
-    // Get users from localStorage
-    const allUsers = JSON.parse(localStorage.getItem("studyconnect_users") || "[]");
+    localStorage.setItem("studyconnect_connections", JSON.stringify(filteredConnections));
     
-    // Filter out users who are already connected or pending
-    const connections = JSON.parse(localStorage.getItem("studyconnect_connections") || "[]");
-    const connectedOrPendingEmails = new Set();
-    connections.forEach(c => {
-      if (c.user_email === u.email || c.peer_email === u.email) {
-        connectedOrPendingEmails.add(c.user_email === u.email ? c.peer_email : c.user_email);
-      }
-    });
-    
-    const suggested = allUsers.filter(p => 
-      p.email !== u.email && !connectedOrPendingEmails.has(p.email)
-    ).slice(0, 4);
-    setPeers(suggested);
-
-    // Load connected peers
-    loadConnectedPeers(u);
+    // Update local state
+    setConnectedPeers(connectedPeers.filter(p => p.email !== peerEmail));
   };
 
   useEffect(() => {
-    const stored = localStorage.getItem("studyconnect_user");
-    if (!stored) {
-      window.location.href = createPageUrl("Auth");
-      return;
+    // Load user data
+    const userData = JSON.parse(localStorage.getItem("studyconnect_user"));
+    if (userData) {
+      setUser(userData);
     }
-    const u = JSON.parse(stored);
-    setUser(u);
-    loadData(u);
+
+    // Load groups
+    const allGroups = JSON.parse(localStorage.getItem("studyconnect_groups") || "[]");
+    const userGroups = allGroups.filter(g => 
+      g.owner_email === userData?.email || 
+      (g.members || []).some(m => m.email === userData?.email)
+    );
+    setGroups(userGroups);
+
+    // Load peers
+    const allPeers = JSON.parse(localStorage.getItem("studyconnect_users") || "[]");
+    const otherPeers = allPeers.filter(p => p.email !== userData?.email);
+    setPeers(otherPeers);
+
+    // Load connections
+    const connections = JSON.parse(localStorage.getItem("studyconnect_connections") || "[]");
+    const userConnections = connections.filter(
+      c => c.user_email === userData?.email || c.peer_email === userData?.email
+    );
+    
+    const connected = userConnections.map(c => {
+      const isUser = c.user_email === userData?.email;
+      return {
+        id: c.id,
+        email: isUser ? c.peer_email : c.user_email,
+        peer_name: isUser ? c.peer_name : c.user_name,
+        peer_university: isUser ? c.peer_university : c.user_university,
+        status: c.status
+      };
+    });
+    setConnectedPeers(connected);
   }, []);
 
   if (!user) return null;
@@ -166,6 +114,7 @@ export default function Dashboard() {
       <TopBar user={user} extraContent={<NotificationBar user={user} />} />
       <div className="flex">
         <Sidebar currentPage="Dashboard" user={user} />
+        
         <main className="flex-1 p-8">
           {/* My Courses */}
           <div className="mb-8">
@@ -198,12 +147,6 @@ export default function Dashboard() {
                         <p className="text-xs text-gray-400">{(g.members || []).length} Active Members</p>
                       </div>
                     </div>
-                    <a
-                      href={createPageUrl(`Groups?view=${g.id}`)}
-                      className="bg-orange-500 text-white text-xs font-bold px-4 py-1.5 rounded hover:bg-orange-600 transition"
-                    >
-                      ENTER
-                    </a>
                   </div>
                 ))}
               </div>
@@ -242,38 +185,25 @@ export default function Dashboard() {
                 ))}
               </div>
             </div>
-
-            {/* Suggested Peers */}
-            <div>
-              <h3 className="text-lg font-bold text-gray-900 mb-4">Suggested Peers</h3>
-              <div className="space-y-3">
-                {peers.length === 0 && (
-                  <p className="text-sm text-gray-400">No peers found.</p>
-                )}
-                {peers.map((p) => (
-                  <div key={p.id} className="flex items-center justify-between bg-white rounded-xl shadow-sm px-4 py-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-bold">
-                        {p.full_name?.[0] || "U"}
-                      </div>
-                      <div>
-                        <p className="font-semibold text-sm text-gray-800">{p.full_name}</p>
-                        <p className="text-xs text-gray-400">{p.university || "University"}</p>
-                      </div>
-                    </div>
-                    <button 
-                      onClick={() => handleConnectPeer(p)}
-                      className="border border-orange-400 text-orange-500 text-xs font-bold px-4 py-1.5 rounded hover:bg-orange-50 transition"
-                    >
-                      CONNECT
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         </main>
       </div>
-    </div>
+      <ChatNotificationBar user={user} />
+      
+      {/* Floating Chat Buttons */}
+            
+      {/* Course Chat Button */}
+      <button
+        onClick={handleCourseChatNavigation}
+        className="fixed bottom-20 right-4 z-50 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-full p-4 shadow-xl transition-all duration-300 hover:scale-110 hover:shadow-2xl group"
+        title="Open Group Chat"
+      >
+        <Users className="w-6 h-6 transition-transform duration-300 group-hover:rotate-12" />
+        <span className="absolute bottom-full right-0 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+          Group Chat
+        </span>
+      </button>
+      
+          </div>
   );
 }

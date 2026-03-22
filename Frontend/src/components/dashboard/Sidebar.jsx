@@ -1,5 +1,5 @@
 import { createPageUrl } from "@/utils/index.js";
-import { LayoutDashboard, BookOpen, Users, Video, User } from "lucide-react";
+import { LayoutDashboard, BookOpen, Users, Video, User, MessageCircle } from "lucide-react";
 
 const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, page: "Dashboard" },
@@ -44,6 +44,21 @@ export default function Sidebar({ currentPage, user }) {
           );
         })}
       </nav>
+      
+      {/* Group Chat Shortcut - Bottom of Sidebar */}
+      <div className="border-t border-gray-200 p-4">
+        <a
+          href="/chat"
+          className={`flex items-center gap-3 px-3 py-3 text-sm font-medium transition rounded-lg ${
+            currentPage === "Chat"
+              ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg"
+              : "text-gray-600 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 hover:text-orange-600"
+          }`}
+        >
+          <MessageCircle className="w-5 h-5" />
+          <span>Group Chat</span>
+        </a>
+      </div>
     </div>
   );
 }
