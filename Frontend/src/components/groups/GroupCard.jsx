@@ -1,10 +1,11 @@
-import { Trash2, Lock, Unlock, ArrowRight, UserPlus } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
 
-export default function GroupCard({ group, user, onDelete, onView, onRequestJoin }) {
+export default function GroupCard({ group, user, onDelete, onView, onRequestJoin, onChatClick }) {
+  const navigate = useNavigate();
   const memberCount = (group.members || []).length;
   const maxMembers = group.max_members || 100;
   const isOwner = group.owner_email === user?.email;
-  const isMember = group.members?.some(m => m.email === user?.email);
+  const isMember = group.members?.some(m => m.email === user.email);
   const isFull = memberCount >= maxMembers;
 
   // Check if user has already requested to join this group
@@ -24,13 +25,13 @@ export default function GroupCard({ group, user, onDelete, onView, onRequestJoin
         <div className="flex items-center gap-2">
           <h3 className="font-bold text-gray-900">{group.name}</h3>
           {group.visibility === "Private"
-            ? <Lock className="w-4 h-4 text-gray-400" />
-            : <Unlock className="w-4 h-4 text-green-500" />
+            ? <span className="text-gray-400 text-sm">🔒</span>
+            : <span className="text-green-500 text-sm">🔓</span>
           }
         </div>
         {isOwner && (
-          <button onClick={onDelete} className="text-red-400 hover:text-red-600 transition">
-            <Trash2 className="w-4 h-4" />
+          <button onClick={onDelete} className="text-red-400 hover:text-red-600 transition text-sm">
+            Delete
           </button>
         )}
       </div>
@@ -40,7 +41,7 @@ export default function GroupCard({ group, user, onDelete, onView, onRequestJoin
       <p className="text-sm text-gray-500 mb-4 line-clamp-2">{group.description}</p>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1 text-gray-500 text-sm">
-          <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2"/><circle cx="9" cy="7" r="4" stroke="currentColor" strokeWidth="2"/></svg>
+          <span>👥</span>
           {memberCount}/{maxMembers}
         </div>
         {isMember ? (
@@ -48,14 +49,14 @@ export default function GroupCard({ group, user, onDelete, onView, onRequestJoin
             onClick={onView}
             className="flex items-center gap-1 bg-green-100 text-green-700 text-sm font-medium px-4 py-1.5 rounded transition"
           >
-            Joined <ArrowRight className="w-3 h-3" />
+            Joined
           </button>
         ) : hasRequested() ? (
           <button
             disabled
             className="flex items-center gap-1 bg-yellow-100 text-yellow-700 text-sm font-medium px-4 py-1.5 rounded cursor-not-allowed"
           >
-            Requested <UserPlus className="w-3 h-3" />
+            Requested
           </button>
         ) : isFull ? (
           <button
@@ -69,7 +70,7 @@ export default function GroupCard({ group, user, onDelete, onView, onRequestJoin
             onClick={() => onRequestJoin(group)}
             className="flex items-center gap-1 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-4 py-1.5 rounded transition"
           >
-            <UserPlus className="w-3 h-3" /> Request to Join
+            Request to Join
           </button>
         )}
       </div>

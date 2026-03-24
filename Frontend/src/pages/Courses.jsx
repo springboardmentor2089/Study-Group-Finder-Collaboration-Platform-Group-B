@@ -3,7 +3,9 @@ import { createPageUrl } from "@/utils/index.js";
 import TopBar from "../components/dashboard/TopBar";
 import Sidebar from "../components/dashboard/Sidebar";
 import NotificationBar from "../components/notifications/NotificationBar";
-import { BookOpen, Users, Clock, Star, CheckCircle, X, User } from "lucide-react";
+import ChatNotificationBar from "../components/notifications/ChatNotificationBar";
+import InlineChat from "../components/groups/InlineChat";
+import { BookOpen, Users, Clock, Star, CheckCircle, X, User, MessageCircle, Trash2 } from "lucide-react";
 
 const COURSES_DATA = [
   {
@@ -81,6 +83,7 @@ export default function Courses() {
   const [customCourses, setCustomCourses] = useState([]);
   const [showCustomCourseInput, setShowCustomCourseInput] = useState(false);
   const [customCourseName, setCustomCourseName] = useState("");
+  const [chatCourseId, setChatCourseId] = useState(null);
 
   useEffect(() => {
     const stored = localStorage.getItem("studyconnect_user");
@@ -237,12 +240,21 @@ export default function Courses() {
                           <span className="text-xs text-gray-500">
                             Enrolled: {new Date(course.enrolledAt).toLocaleDateString()}
                           </span>
-                          <button
-                            onClick={() => handleDisenroll(course.id)}
-                            className="text-red-500 hover:text-red-700 hover:bg-red-50 px-2 py-1 rounded text-xs font-medium transition"
-                          >
-                            Unenroll
-                          </button>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => setChatCourseId(course.id)}
+                              className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded text-xs font-medium transition flex items-center gap-1"
+                            >
+                              <MessageCircle className="w-3 h-3" />
+                              Chat
+                            </button>
+                            <button
+                              onClick={() => handleDisenroll(course.id)}
+                              className="text-red-500 hover:text-red-700 hover:bg-red-50 px-2 py-1 rounded text-xs font-medium transition"
+                            >
+                              Unenroll
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -369,6 +381,21 @@ export default function Courses() {
           </div>
         </main>
       </div>
+      
+      {chatCourseId && (
+        <InlineChat 
+          group={{
+            id: chatCourseId,
+            name: COURSES_DATA.find(c => c.id === chatCourseId)?.title || customCourses.find(c => c.id === chatCourseId)?.title || 'Course Chat',
+            course: COURSES_DATA.find(c => c.id === chatCourseId)?.title || customCourses.find(c => c.id === chatCourseId)?.title || 'Course',
+            members: enrolledCourses.filter(c => c.id === chatCourseId).map(() => ({ email: user.email, name: user.fullName || user.name }))
+          }}
+          user={user} 
+          onClose={() => setChatCourseId(null)}
+        />
+      )}
+      
+      <ChatNotificationBar user={user} />
     </div>
   );
 }

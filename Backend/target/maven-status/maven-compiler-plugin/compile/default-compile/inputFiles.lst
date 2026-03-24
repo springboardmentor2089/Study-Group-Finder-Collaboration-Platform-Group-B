@@ -1,24 +1,33 @@
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/config/SecurityConfig.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/model/GroupMember.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/controller/AuthController.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/dto/CreateGroupRequest.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/service/JwtService.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/dto/SignInRequest.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/repository/UserRepository.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/model/Course.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/service/CustomUserDetailsService.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/repository/CourseRepository.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/model/User.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/model/Notification.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/repository/GroupMemberRepository.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/model/StudyGroup.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/repository/StudyGroupRepository.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/controller/StudyGroupController.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/dto/SignUpRequest.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/service/AuthService.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/controller/NotificationController.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/StudyGroupFinderApplication.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/config/JwtAuthenticationFilter.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/service/StudyGroupService.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/repository/NotificationRepository.java
-/Users/dineshm/Desktop/Study-Group finder backend /src/main/java/com/studygroup/studygroupfinder/service/NotificationService.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/controller/ChatRestController.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/service/CourseService.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/repository/StudyGroupRepository.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/controller/StudyGroupController.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/controller/NotificationController.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/StudyGroupFinderApplication.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/service/StudyGroupService.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/dto/CreateGroupRequest.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/model/Course.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/controller/AuthController.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/service/AuthService.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/model/GroupMember.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/model/Notification.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/controller/ChatController.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/repository/GroupMemberRepository.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/service/JwtService.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/config/GlobalExceptionHandler.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/repository/ChatMessageRepository.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/dto/SignInRequest.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/repository/NotificationRepository.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/repository/CourseRepository.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/dto/SignUpRequest.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/model/User.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/config/SecurityConfig.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/model/ChatMessage.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/service/CustomUserDetailsService.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/controller/CourseController.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/service/ChatService.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/service/NotificationService.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/config/WebSocketConfig.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/model/StudyGroup.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/config/JwtAuthenticationFilter.java
+/Users/dineshm/Desktop/Study Group Finder Project 2/study-group-finder-backend/src/main/java/com/studygroup/studygroupfinder/repository/UserRepository.java

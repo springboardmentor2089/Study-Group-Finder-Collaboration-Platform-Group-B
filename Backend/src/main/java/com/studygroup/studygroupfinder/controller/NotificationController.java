@@ -1,33 +1,41 @@
 package com.studygroup.studygroupfinder.controller;
+
 import com.studygroup.studygroupfinder.model.Notification;
 import com.studygroup.studygroupfinder.service.AuthService;
 import com.studygroup.studygroupfinder.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 @RestController
 @RequestMapping("/api/notifications")
 @CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"})
 public class NotificationController {
+
     @Autowired
     private NotificationService notificationService;
+
     @Autowired
     private AuthService authService;
+
     @GetMapping
     public ResponseEntity<List<Notification>> getUserNotifications(@RequestHeader("Authorization") String token) {
         String email = getUserEmailFromToken(token);
         List<Notification> notifications = notificationService.getUserNotifications(email);
         return ResponseEntity.ok(notifications);
     }
+
     @GetMapping("/unread")
     public ResponseEntity<List<Notification>> getUnreadNotifications(@RequestHeader("Authorization") String token) {
         String email = getUserEmailFromToken(token);
         List<Notification> notifications = notificationService.getUnreadNotifications(email);
         return ResponseEntity.ok(notifications);
     }
+
     @GetMapping("/unread-count")
     public ResponseEntity<Map<String, Long>> getUnreadCount(@RequestHeader("Authorization") String token) {
         String email = getUserEmailFromToken(token);
@@ -36,6 +44,7 @@ public class NotificationController {
         response.put("unreadCount", count);
         return ResponseEntity.ok(response);
     }
+
     @PostMapping("/{id}/read")
     public ResponseEntity<?> markAsRead(@PathVariable Long id,
                                        @RequestHeader("Authorization") String token) {
@@ -50,6 +59,7 @@ public class NotificationController {
             return ResponseEntity.badRequest().body(error);
         }
     }
+
     @PostMapping("/mark-all-read")
     public ResponseEntity<?> markAllAsRead(@RequestHeader("Authorization") String token) {
         String email = getUserEmailFromToken(token);
@@ -58,6 +68,7 @@ public class NotificationController {
         response.put("message", "All notifications marked as read");
         return ResponseEntity.ok(response);
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteNotification(@PathVariable Long id,
                                               @RequestHeader("Authorization") String token) {
@@ -72,11 +83,12 @@ public class NotificationController {
             return ResponseEntity.badRequest().body(error);
         }
     }
+
     private String getUserEmailFromToken(String token) {
         String jwtToken = token.substring(7);
         return jwtService.extractEmail(jwtToken);
     }
+
     @Autowired
     private com.studygroup.studygroupfinder.service.JwtService jwtService;
-    
 }
